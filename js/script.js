@@ -6,11 +6,10 @@ let totalExpenses;
 getId("calculate-btn").addEventListener('click', function() {
     totalSalary = findInputValue("total-salary");
     // expenses items value
-    // always findInputValue automatic isNaN validation check
+    // [l:19] always findInputValue automatic isNaN validation check
     const food = findInputValue("food");
     const rent = findInputValue("rent");
     const clothes = findInputValue("clothes");
-
     // Validation income totalSalary input field
     if(!totalSalary) {
         const salaryElement = getId("total-salary");
@@ -19,21 +18,19 @@ getId("calculate-btn").addEventListener('click', function() {
         return toastMsg("Input your income salary")
     }
     // Compere totalSalary and total Expenses amount
-    const validation = incomeValidation(totalSalary, food, rent, clothes);  // incomeValidation a part of utilities.js
+    // [l:30] incomeValidation a part of utilities.js
+    const validation = incomeValidation(totalSalary, food, rent, clothes);
     if(validation === false) {
         return toastMsg("You spend more than you earn");
     }
-
     // total expenses amount
     totalExpenses = food + rent + clothes;
     // Calculate totalSalary to totalExpenses
     totalBalance = totalSalary - totalExpenses;
-
     // set total expenses in output field
     setElementValue("total-expenses", totalExpenses);
     // set total balance in output field
     setElementValue("balance", totalBalance);
-
     // Enable Saving Amount Calculator
     getId("save").removeAttribute("disabled");
     getId("save-btn").removeAttribute("disabled");
@@ -41,18 +38,20 @@ getId("calculate-btn").addEventListener('click', function() {
 
 // Calculate Saving Amount
 getId("save-btn").addEventListener('click', function() {
-    const percentageStr = getId("save").value;
-    const percentage = Number(percentageStr);
+    // Calculate Savings
+    const percentageStr = getId("save");
+    const percentage = Number(percentageStr.value);
     const savingAmount = totalSalary / 100 * percentage;
     const remainingAmount = totalBalance - savingAmount;
-
-
     // Saving amount field validations
-
-    if (!percentage || percentage > 100 || remainingAmount < 0 || savingAmount > totalBalance) {
-        if (!percentage) {
-            return toastMsg("Input saving percentage");
-        } else if (percentage > 100) {
+    if (!percentage || percentage < 0 || isNaN(percentage) || percentage > 100 || remainingAmount < 0 || savingAmount > totalBalance) {
+        percentageStr.value = "";
+        if (isNaN(percentage) || percentage < 0) {
+            return toastMsg("Input valid percentage");
+        } else if (!percentage) {
+            return toastMsg("Enter saving percentage");
+        }
+         else if (percentage > 100) {
             return toastMsg("Savings can't exceed 100%");
         } else {
             // calculation remaining percentage for saving the input field
@@ -60,7 +59,6 @@ getId("save-btn").addEventListener('click', function() {
             return toastMsg("Your savings should be equal to or less than " + remainingPercentage + "%");
         }
     }
-
     // set saving amount
     setElementValue("saving-amount", savingAmount);
     // set remaining amount in output field

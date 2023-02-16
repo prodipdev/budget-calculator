@@ -23,7 +23,6 @@ function findInputValue(setId) {
     if (checkInput === false) {
         return Number(0);
     }
-
     return parseFloat(inputElement.value);
 }
 
