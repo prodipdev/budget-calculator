@@ -1,23 +1,28 @@
-let totalSalary;
-let totalBalance;
+let totalSalary;    // Always set total Income Salary for avoid calculate issue
+let totalBalance;   // Set Total Balance for calculate saving amount
+
 // Calculate Income and Expenses
 getId("calculate-btn").addEventListener('click', function() {
     totalSalary = findInputValue("total-salary");
     // expenses items value
+    // always findInputValue automatic isNaN validation check
     const food = findInputValue("food");
     const rent = findInputValue("rent");
     const clothes = findInputValue("clothes");
-    const validation = incomeValidation(totalSalary, food, rent, clothes);
+    
+    // Validation income totalSalary input field
     if(!totalSalary) {
         const salaryElement = getId("total-salary");
         salaryElement.setAttribute("placeholder", "enter amount*");
-        salaryElement.setAttribute("class", "w-36 h-7 rounded-md bg-gray-400 text-white px-2 placeholder-rose-500");
-        return;
+        salaryElement.classList.add("placeholder-rose-500", "font-normal");
+        return toastMsg("Input your income salary")
+    }
+    // Compere totalSalary and total Expenses amount
+    const validation = incomeValidation(totalSalary, food, rent, clothes);  // incomeValidation a part of utilities.js
+    if(validation === false) {
+        return toastMsg("You spend more than you earn");
     }
 
-    if(validation === false) {
-        return alert("You don't expenses larger than your income!");
-    }
     // total expenses amount
     const totalExpenses = food + rent + clothes;
     // Calculate totalSalary to totalExpenses
@@ -35,10 +40,21 @@ getId("calculate-btn").addEventListener('click', function() {
 
 // Calculate Saving Amount
 getId("save-btn").addEventListener('click', function() {
-
-    const percentage = findInputValue("save");
+    const percentageStr = getId("save").value;
+    const percentage = Number(percentageStr);
     const savingAmount = totalSalary / 100 * percentage;
     const remainingAmount = totalBalance - savingAmount;
+
+    // Saving amount field validations
+    if (!percentage || percentage > 100 || remainingAmount < 0 || savingAmount > totalBalance) {
+        if (!percentage) {
+            return toastMsg("Input saving percentage")
+        } else if (percentage > 100) {
+            return toastMsg("Savings can't exceed 100%")
+        } else {
+            return toastMsg("Savings can't be greater than the remaining balance")
+        }
+    }
 
     // set saving amount
     setElementValue("saving-amount", savingAmount);

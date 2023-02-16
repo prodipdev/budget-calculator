@@ -3,6 +3,11 @@ function getId(setId) {
     return document.getElementById(setId);
 }
 
+// Find Element Value
+function findElementValue(setId) {
+    return getId(setId).innerText;
+}
+
 // Set Element Value
 function setElementValue(setId, value) {
     const getElement = getId(setId);
@@ -12,7 +17,7 @@ function setElementValue(setId, value) {
 // Find input Value
 function findInputValue(setId) {
     const inputElement = getId(setId);
-
+    // check input field validation [line no: 40]
     const checkInput = inputValidation(inputElement);
     if (checkInput === false) {
         return Number(0);
@@ -20,12 +25,6 @@ function findInputValue(setId) {
 
     const inputValue = parseFloat(inputElement.value);
     return Number(inputValue.toFixed(1));
-}
-
-// Find Element Value
-function findElementValue(setId) {
-
-    return getId(setId).innerText;
 }
 
 // Calculate income and expenses validation
@@ -45,11 +44,22 @@ function inputValidation(inputElement) {
     //     return false;
     // }
     if (!inputElement.value) {
-        return false
+        return false;
     } else if (isNaN(inputElement.value) || inputElement.value < 0) {
         inputElement.value = '';
-        inputElement.setAttribute("placeholder", "invalid amount");
-        inputElement.setAttribute("class", "w-36 h-7 rounded-md bg-gray-400 text-white px-2 placeholder-rose-500");
+        inputElement.setAttribute("placeholder", "invalid amount*");
+        inputElement.classList.add("placeholder-rose-500", "font-normal");
         return false;
     }
+}
+
+// set warning validation massages using the toast
+function toastMsg(massage) {
+    document.getElementById("myToast").classList.remove("hidden");
+            // Set Toast Massages using function argument
+    document.getElementById("toast-msg").innerText = massage;
+            // Hide the toast after 5 seconds (5000ms)
+    setTimeout(function () {
+        getId("myToast").classList.add("hidden");
+    }, 5000);
 }
