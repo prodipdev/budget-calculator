@@ -10,8 +10,9 @@ function findElementValue(setId) {
 
 // Set Element Value
 function setElementValue(setId, value) {
+    const valueFloat = parseFloat(value);
     const getElement = getId(setId);
-    return getElement.innerText = value;
+    return getElement.innerText = Number(valueFloat.toFixed(2));    // this method for unexpected float amounts
 }
 
 // Find input Value
@@ -23,8 +24,7 @@ function findInputValue(setId) {
         return Number(0);
     }
 
-    const inputValue = parseFloat(inputElement.value);
-    return Number(inputValue.toFixed(1));
+    return parseFloat(inputElement.value);
 }
 
 // Calculate income and expenses validation

@@ -9,7 +9,7 @@ getId("calculate-btn").addEventListener('click', function() {
     const food = findInputValue("food");
     const rent = findInputValue("rent");
     const clothes = findInputValue("clothes");
-    
+
     // Validation income totalSalary input field
     if(!totalSalary) {
         const salaryElement = getId("total-salary");
@@ -44,6 +44,7 @@ getId("save-btn").addEventListener('click', function() {
     const percentage = Number(percentageStr);
     const savingAmount = totalSalary / 100 * percentage;
     const remainingAmount = totalBalance - savingAmount;
+    
 
     // Saving amount field validations
     if (!percentage || percentage > 100 || remainingAmount < 0 || savingAmount > totalBalance) {
