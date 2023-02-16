@@ -1,5 +1,6 @@
 let totalSalary;    // Always set total Income Salary for avoid calculate issue
 let totalBalance;   // Set Total Balance for calculate saving amount
+let totalExpenses;
 
 // Calculate Income and Expenses
 getId("calculate-btn").addEventListener('click', function() {
@@ -24,7 +25,7 @@ getId("calculate-btn").addEventListener('click', function() {
     }
 
     // total expenses amount
-    const totalExpenses = food + rent + clothes;
+    totalExpenses = food + rent + clothes;
     // Calculate totalSalary to totalExpenses
     totalBalance = totalSalary - totalExpenses;
 
@@ -44,16 +45,19 @@ getId("save-btn").addEventListener('click', function() {
     const percentage = Number(percentageStr);
     const savingAmount = totalSalary / 100 * percentage;
     const remainingAmount = totalBalance - savingAmount;
-    
+
 
     // Saving amount field validations
+
     if (!percentage || percentage > 100 || remainingAmount < 0 || savingAmount > totalBalance) {
         if (!percentage) {
-            return toastMsg("Input saving percentage")
+            return toastMsg("Input saving percentage");
         } else if (percentage > 100) {
-            return toastMsg("Savings can't exceed 100%")
+            return toastMsg("Savings can't exceed 100%");
         } else {
-            return toastMsg("Savings can't be greater than the remaining balance")
+            // calculation remaining percentage for saving the input field
+            const remainingPercentage = Number(parseFloat(100 - totalExpenses/(totalSalary / 100))).toFixed(2);
+            return toastMsg("Your savings should be equal to or less than " + remainingPercentage + "%");
         }
     }
 
